@@ -10,7 +10,9 @@ int main() {
     avl.insert(5);
     avl.insert(6);
     avl.insert(7);
+    avl.insert(8);
 
+    avl.remove(4);
     avl.preOrderTraversal();
     return 0;
 }

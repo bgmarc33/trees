@@ -1,6 +1,7 @@
 //
 // Created by Bryan Giordano on 4/21/19.
 //
+//
 
 #include <algorithm>
 #include <iostream>
@@ -29,10 +30,39 @@ AVLNode* AVL::_destroy(AVLNode* node) {
 
 int AVL::_height(AVLNode* node) {
     if (!node) {
-        return 0;
+        return -1;
     }
 
     return node->height;
+}
+
+AVLNode* AVL::_balance(AVLNode* node, int val) {
+    // get the balance factor
+    int balanceFactor = this->_getBalanceFactor(node);
+
+    // Left Left Case
+    if (balanceFactor > 1 && val < node->left->value) {
+        return _rightRotation(node);
+    }
+
+    // Right Right Case
+    if (balanceFactor < -1 && val > node->right->value) {
+        return _leftRotation(node);
+    }
+
+    // Left Right Case
+    if (balanceFactor > 1 && val > node->left->value) {
+        node->left = _leftRotation(node->left);
+        return _rightRotation(node);
+    }
+
+    // Right Left Case
+    if (balanceFactor < -1 && val < node->right->value) {
+        node->right = _rightRotation(node->right);
+        return _leftRotation(node);
+    }
+
+    return node;
 }
 
 int AVL::_getBalanceFactor(AVLNode* node) {
@@ -59,31 +89,8 @@ AVLNode* AVL::_insert(AVLNode* node, int val) {
     // update the height of the node
     node->height = 1 + std::max(this->_height(node->left), this->_height(node->right));
 
-    // get the balance factor
-    int balanceFactor = this->_getBalanceFactor(node);
-
-    // Left Left Case
-    if (balanceFactor > 1 && val < node->left->value) {
-        return _rightRotation(node);
-    }
-
-    // Right Right Case
-    if (balanceFactor < -1 && val > node->right->value) {
-        return _leftRotation(node);
-    }
-
-    // Left Right Case
-    if (balanceFactor > 1 && val > node->left->value) {
-        node->left = _leftRotation(node->left);
-        return _rightRotation(node);
-    }
-
-    // Right Left Case
-    if (balanceFactor < -1 && val < node->right->value) {
-        node->right = _rightRotation(node->right);
-        return _leftRotation(node);
-    }
-
+    // balance
+    node = this->_balance(node, val);
     return node;
 }
 
@@ -138,6 +145,9 @@ AVLNode* AVL::_remove(AVLNode* node, int val) {
                 node = nullptr;
             }
         }
+
+        // balance
+        this->_balance(node, val);
     }
 
     return node;
