@@ -36,6 +36,22 @@ int AVL::_height(AVLNode* node) {
     return node->height;
 }
 
+
+/*
+    IF tree is right heavy {
+        IF tree's right subtree is left heavy {
+            Perform Double Left rotation (Left-Right)
+        } ELSE {
+            Perform Single Left rotation
+        }
+    ELSE IF tree is left heavy {
+        IF tree's left subtree is right heavy {
+            Perform Double Right rotation (Right-Left)
+        } ELSE {
+            Perform Single Right rotation
+        }
+    }
+ */
 AVLNode* AVL::_balance(AVLNode* node, int val) {
     // get the balance factor
     int balanceFactor = this->_getBalanceFactor(node);
