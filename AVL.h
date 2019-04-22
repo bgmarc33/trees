@@ -30,16 +30,39 @@ struct AVLNode {
     AVLNode* left;
     AVLNode* right;
     int value;
-    AVLNode(int v) : left(nullptr), right(nullptr), value(v) {}
+    int height;
+    AVLNode(int v) : left(nullptr), right(nullptr), value(v), height(1) {}
 };
 
 class AVL {
     private:
         AVLNode* root;
 
-    public:
-        AVL():root(nullptr){}
+        AVLNode* _insert(AVLNode*, int);
+        AVLNode* _remove(AVLNode*, int);
+        AVLNode* _destroy(AVLNode*);
 
+        // returns height of the node
+        int _height(AVLNode*);
+
+        // rotations
+        AVLNode* _leftRotation(AVLNode*);
+        AVLNode* _rightRotation(AVLNode*);
+
+        // traversal
+        void _preOrderTraversal(AVLNode*);
+
+        // helper functions
+        int _getLeftMax(AVLNode*);
+        int _getBalanceFactor(AVLNode*);
+    public:
+        AVL();
+        ~AVL();
+
+        void insert(int);
+        void remove(int);
+
+        void preOrderTraversal();
 };
 
 
